@@ -13,11 +13,6 @@ class LearnApplicationTests {
     private OrderService orderService;
 
     @Test
-    void contextLoads() {
-    }
-
-
-    @Test
     public void orderEventTest() {
         Order order = orderService.save(new Order());
         orderService.update(order);
