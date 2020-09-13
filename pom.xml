@@ -30,6 +30,15 @@
             <artifactId>guava</artifactId>
             <version>29.0-jre</version>
         </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+		</dependency>
 
 		<!-- Spring -->
 		<dependency>
