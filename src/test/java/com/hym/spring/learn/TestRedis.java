@@ -1,6 +1,8 @@
 package com.hym.spring.learn;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
+import com.hym.spring.learn.redis.RedisRepo;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class TestRedis {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private RedisRepo redisRepo;
 
     @Test
     public void test() {
@@ -47,5 +51,11 @@ public class TestRedis {
             System.out.println("exists is false");
         }
         Assert.assertEquals("aa", operations.get("com.neox").get("test"));
+    }
+
+    @Test
+    public void testAuto() {
+        System.out.println(JSON.toJSON(redisRepo.getUser("111")));
+        System.out.println(JSON.toJSON(redisRepo.getNewUser("111")));
     }
 }
