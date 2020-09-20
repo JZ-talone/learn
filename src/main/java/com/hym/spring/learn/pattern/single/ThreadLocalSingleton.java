@@ -6,7 +6,7 @@ package com.hym.spring.learn.pattern.single;
  * 线程单例模式
  *
  * 伪线程安全
- * 使用threadlocal实现多数据源切换
+ * 使用threadlocal实现多数据源切换·
  *
  * @author huangyiming
  * @since 2020/9/20 21:27
