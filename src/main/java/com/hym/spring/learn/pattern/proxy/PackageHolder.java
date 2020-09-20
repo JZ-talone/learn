@@ -52,4 +52,19 @@ public class PackageHolder {
      * spring可以强制使用cglib
      * <aop:aspecttj-autoproxy proxy-target-class="true" />
      */
+
+    /**
+     * 优点
+     * 代理模式能将被代理对象与调用者分离
+     * 一定程度上降低了系统的耦合程度已于拓展
+     * 代理可以保护目标对象
+     * 增强目标对象的指责
+     */
+
+    /**
+     * 缺点
+     * 增加了系统的复杂度
+     * 增加了类
+     * 会有一定的效率上的衰减
+     */
 }
