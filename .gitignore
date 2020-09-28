@@ -4,3 +4,6 @@
 /.idea/misc.xml
 /.idea/codeStyles/Project.xml
 /.idea/vcs.xml
+/.idea/
+/target/
+*.iml
