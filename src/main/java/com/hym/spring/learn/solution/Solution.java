@@ -1,9 +1,6 @@
 package com.hym.spring.learn.solution;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * ${DESCRIPTION}
@@ -87,11 +84,6 @@ public class Solution {
 
         return answer;
 
-    }
-
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        System.out.println(solution.isValid("([)]"));
     }
 
     /**
@@ -227,6 +219,17 @@ public class Solution {
         return curIndex;
     }
 
+    public static void main(String[] args) {
+
+
+        Solution solution = new Solution();
+
+        int[] nums = new int[]{1, 3, 4, 5, 6};
+
+        TreeNode treeNode = solution.sortedArrayToBST(nums);
+        System.out.println(true);
+    }
+
     /**
      * 实现 strStr() 函数。
      * <p>
@@ -246,7 +249,436 @@ public class Solution {
      * @return
      */
     public int strStr(String haystack, String needle) {
-        return 0;
+        if (null == needle || needle.length() == 0) {
+            return 0;
+        }
+        if (haystack.length() < needle.length()) {
+            return -1;
+        }
+
+        char first = needle.charAt(0);
+        for (int i = 0; i <= haystack.length() - needle.length(); i++) {
+            if (haystack.charAt(i) == first && haystack.substring(i, i + needle.length()).equals(needle)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+     * <p>
+     * 你可以假设数组中无重复元素。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: [1,3,5,6], 5
+     * 输出: 2
+     * 示例 2:
+     * <p>
+     * 输入: [1,3,5,6], 2
+     * 输出: 1
+     * 示例 3:
+     * <p>
+     * 输入: [1,3,5,6], 7
+     * 输出: 4
+     * 示例 4:
+     * <p>
+     * 输入: [1,3,5,6], 0
+     * 输出: 0
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int searchInsert(int[] nums, int target) {
+        if (nums.length == 0) {
+            return 0;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (target <= nums[i]) {
+                return i;
+            }
+        }
+
+        return nums.length;
+    }
+
+    /**
+     * 给定一个正整数 n ，输出外观数列的第 n 项。
+     * <p>
+     * 「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。
+     * <p>
+     * 你可以将其视作是由递归公式定义的数字字符串序列：
+     * <p>
+     * countAndSay(1) = "1"
+     * countAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。
+     * 前五项如下：
+     * <p>
+     * 1.     1
+     * 2.     11
+     * 3.     21
+     * 4.     1211
+     * 5.     111221
+     * 第一项是数字 1
+     * 描述前一项，这个数是 1 即 “ 一 个 1 ”，记作 "11"
+     * 描述前一项，这个数是 11 即 “ 二 个 1 ” ，记作 "21"
+     * 描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 "1211"
+     * 描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 "111221"
+     * 要 描述 一个数字字符串，首先要将字符串分割为 最小 数量的组，每个组都由连续的最多 相同字符 组成。然后对于每个组，先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。
+     * <p>
+     * 输入：n = 1
+     * 输出："1"
+     * 解释：这是一个基本样例。
+     * 示例 2：
+     * <p>
+     * 输入：n = 4
+     * 输出："1211"
+     * 解释：
+     * countAndSay(1) = "1"
+     * countAndSay(2) = 读 "1" = 一 个 1 = "11"
+     * countAndSay(3) = 读 "11" = 二 个 1 = "21"
+     * countAndSay(4) = 读 "21" = 一 个 2 + 一 个 1 = "12" + "11" = "1211"
+     *
+     * @param n
+     * @return
+     */
+    public String countAndSay(int n) {
+        return null;
+    }
+
+    /**
+     * 给定一个仅包含大小写字母和空格 ' ' 的字符串 s，返回其最后一个单词的长度。如果字符串从左向右滚动显示，那么最后一个单词就是最后出现的单词。
+     * <p>
+     * 如果不存在最后一个单词，请返回 0 。
+     * <p>
+     * 说明：一个单词是指仅由字母组成、不包含任何空格字符的 最大子字符串。
+     * <p>
+     *  
+     * <p>
+     * 示例:
+     * <p>
+     * 输入: "Hello World"
+     * 输出: 5
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLastWord(String s) {
+        if (null == s || s.length() == 0) {
+            return 0;
+        }
+
+        Integer lastIndex = s.length() - 1;
+        Integer i;
+        for (i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == ' ') {
+                if (i.equals(lastIndex)) {
+                    lastIndex--;
+                } else {
+                    return lastIndex - i;
+                }
+            }
+        }
+
+        return lastIndex - i;
+
+    }
+
+    /**
+     * 给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
+     * <p>
+     * 最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+     * <p>
+     * 你可以假设除了整数 0 之外，这个整数不会以零开头。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：digits = [1,2,3]
+     * 输出：[1,2,4]
+     * 解释：输入数组表示数字 123。
+     * 示例 2：
+     * <p>
+     * 输入：digits = [4,3,2,1]
+     * 输出：[4,3,2,2]
+     * 解释：输入数组表示数字 4321。
+     * 示例 3：
+     * <p>
+     * 输入：digits = [0]
+     * 输出：[1]
+     *
+     * @param digits
+     * @return
+     */
+    public int[] plusOne(int[] digits) {
+        boolean flag = false;
+        for (int i = digits.length - 1; i >= 0; i--) {
+            int x = digits[i] + 1;
+            if (x / 10 > 0) {
+                digits[i] = x % 10;
+                if (i == 0) {
+                    flag = true;
+                }
+            } else {
+                digits[i] = x;
+                return digits;
+            }
+        }
+
+        if (flag) {
+            int[] x = new int[digits.length + 1];
+            x[0] = 1;
+
+            return x;
+        }
+        return null;
+    }
+
+    /**
+     * 给你两个二进制字符串，返回它们的和（用二进制表示）。
+     * <p>
+     * 输入为 非空 字符串且只包含数字 1 和 0。
+     * <p>
+     *  
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: a = "11", b = "1"
+     * 输出: "100"
+     * 示例 2:
+     * <p>
+     * 输入: a = "1010", b = "1011"
+     * 输出: "10101"
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public String addBinary(String a, String b) {
+        return null;
+    }
+
+    /**
+     * 实现 int sqrt(int x) 函数。
+     * <p>
+     * 计算并返回 x 的平方根，其中 x 是非负整数。
+     * <p>
+     * 由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: 4
+     * 输出: 2
+     * 示例 2:
+     * <p>
+     * 输入: 8
+     * 输出: 2
+     * 说明: 8 的平方根是 2.82842...,
+     *      由于返回类型是整数，小数部分将被舍去。
+     *
+     * @param x
+     * @return
+     */
+    public int mySqrt(int x) {
+        int l = 0, r = x, ans = -1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if ((long) mid * mid <= x) {
+                ans = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return ans;
+    }
+
+    public int mySqrt1(int x) {
+        if (x == 0) {
+            return 0;
+        }
+
+        double C = x, x0 = x;
+        while (true) {
+            double xi = 0.5 * (x0 + C / x0);
+            if (Math.abs(x0 - xi) < 1e-7) {
+                break;
+            }
+            x0 = xi;
+        }
+        return (int) x0;
+    }
+
+    /**
+     * 给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: 1->1->2
+     * 输出: 1->2
+     * 示例 2:
+     * <p>
+     * 输入: 1->1->2->3->3
+     * 输出: 1->2->3
+     *
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        if (null == head || null == head.next) {
+            return head;
+        }
+        ListNode before = head;
+        ListNode current = head.next;
+        while (null != current) {
+            if (current.val == before.val) {
+                before.next = current.next;
+                current = current.next;
+            } else {
+                before = current;
+                current = current.next;
+            }
+        }
+        return head;
+    }
+
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if ((null != p && null == q) || (null != q && null == p)) {
+            return false;
+        }
+        if (null == p && null == q) {
+            return true;
+        }
+        if (p.val != q.val) {
+            return false;
+        }
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
+    public boolean isSymmetric(TreeNode root) {
+        if (null == root) {
+            return true;
+        }
+        List<Integer> left = cengcebl(root.left, true);
+        List<Integer> right = cengcebl(root.right, false);
+        return left.equals(right);
+    }
+
+    public List<Integer> cengcebl(TreeNode root, boolean leftFirst) {
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode treeNode = stack.pop();
+            if (null != treeNode) {
+                list.add(treeNode.val);
+                stack.push(leftFirst ? treeNode.right : treeNode.left);
+                stack.push(leftFirst ? treeNode.left : treeNode.right);
+            } else {
+                list.add(null);
+            }
+        }
+        return list;
+    }
+
+    public int maxDepth(TreeNode root) {
+        if (null == root) {
+            return 0;
+        }
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+
+    /**
+     * 给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+     * <p>
+     * 例如：
+     * 给定二叉树 [3,9,20,null,null,15,7],
+     * <p>
+     * 3
+     * / \
+     * 9  20
+     * /  \
+     * 15   7
+     * 返回其自底向上的层次遍历为：
+     * <p>
+     * [
+     * [15,7],
+     * [9,20],
+     * [3]
+     * ]
+     *
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> lists = new ArrayList<>();
+        if (null == root) {
+            return lists;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            List<Integer> levelList = new ArrayList<>();
+            Integer size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode treeNode = queue.poll();
+                levelList.add(treeNode.val);
+                if (null != treeNode.left) {
+                    queue.offer(treeNode.left);
+                }
+                if (null != treeNode.right) {
+                    queue.offer(treeNode.right);
+                }
+            }
+            lists.add(0, levelList);
+        }
+
+        return lists;
+    }
+
+    /**
+     * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
+     * <p>
+     * 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+     * <p>
+     * 示例:
+     * <p>
+     * 给定有序数组: [-10,-3,0,5,9],
+     * <p>
+     * 一个可能的答案是：[0,-3,9,-10,null,5]，它可以表示下面这个高度平衡二叉搜索树：
+     * <p>
+     * 0
+     * / \
+     * -3   9
+     * /   /
+     * -10  5
+     *
+     * @param nums
+     * @return
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums.length == 0) {
+            return null;
+        }
+        Integer index = nums.length / 2;
+        TreeNode root = new TreeNode(nums[index]);
+        if (index != 0) {
+            root.left = sortedArrayToBST(Arrays.copyOfRange(nums, 0, index));
+        }
+        if (index != nums.length - 1) {
+            root.right = sortedArrayToBST(Arrays.copyOfRange(nums, index + 1, nums.length));
+        }
+        return root;
+    }
+
+    public boolean isBalanced(TreeNode root) {
+
+
+        return false;
     }
 
     public String longestCommonPrefix(String[] strs) {
