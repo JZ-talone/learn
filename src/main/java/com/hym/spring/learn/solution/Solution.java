@@ -38,35 +38,13 @@ public class Solution {
     }
 
 
-    /**
-     * 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
-     * <p>
-     * 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
-     * <p>
-     *  
-     * <p>
-     * 示例:
-     * <p>
-     * 给定 nums = [2, 7, 11, 15], target = 9
-     * <p>
-     * 因为 nums[0] + nums[1] = 2 + 7 = 9
-     * 所以返回 [0, 1]
-     */
-    public int[] twoSum(int[] nums, int target) {
-
-        int[] answer = new int[2];
-
-        one:
-        for (int i = 0; i < nums.length - 1; i++) {
-            for (int l = i + 1; l < nums.length; l++) {
-                if (nums[i] + nums[l] == target) {
-                    answer[0] = i;
-                    answer[1] = l;
-                    break one;
-                }
-            }
-        }
-        return answer;
+    public static void main(String[] args) {
+        ListNode a = new ListNode(4, null);
+        ListNode b = new ListNode(6, a);
+        ListNode c = new ListNode(2, b);
+        ListNode d = new ListNode(5, null);
+        ListNode e = new ListNode(1, d);
+        System.out.println(new Solution().getIntersectionNode(c, e));
     }
 
     public int[] twoSum1(int[] nums, int target) {
@@ -217,17 +195,6 @@ public class Solution {
             }
         } while (curIndex <= bacIndex);
         return curIndex;
-    }
-
-    public static void main(String[] args) {
-
-
-        Solution solution = new Solution();
-
-        int[] nums = new int[]{1, 3, 4, 5, 6};
-
-        TreeNode treeNode = solution.sortedArrayToBST(nums);
-        System.out.println(true);
     }
 
     /**
@@ -675,10 +642,513 @@ public class Solution {
         return root;
     }
 
+    /**
+     * 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+     * <p>
+     * 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
+     * <p>
+     *  
+     * <p>
+     * 示例:
+     * <p>
+     * 给定 nums = [2, 7, 11, 15], target = 9
+     * <p>
+     * 因为 nums[0] + nums[1] = 2 + 7 = 9
+     * 所以返回 [0, 1]
+     */
+    public int[] twoSum2(int[] nums, int target) {
+
+        int[] answer = new int[2];
+
+        one:
+        for (int i = 0; i < nums.length - 1; i++) {
+            for (int l = i + 1; l < nums.length; l++) {
+                if (nums[i] + nums[l] == target) {
+                    answer[0] = i;
+                    answer[1] = l;
+                    break one;
+                }
+            }
+        }
+        return answer;
+    }
+
     public boolean isBalanced(TreeNode root) {
+        if (null == root) {
+            return true;
+        }
+        Integer lengthl = getLength(root.left);
+        Integer lengthr = getLength(root.right);
+        return lengthl != -1 && lengthr != -1 && Math.abs(lengthl - lengthr) <= 1;
+    }
 
+    private Integer getLength(TreeNode node) {
+        if (null == node) {
+            return 0;
+        }
+        Integer lengthl = getLength(node.left);
+        Integer lengthr = getLength(node.right);
+        if (lengthl == -1 || lengthr == -1 || Math.abs(lengthl - lengthr) > 1) {
+            return -1;
+        }
 
-        return false;
+        return 1 + Math.max(lengthl, lengthr);
+    }
+
+    /**
+     * bad balanced
+     *
+     * @param root
+     * @return
+     */
+    public boolean isBalancedbad(TreeNode root) {
+        if (root == null) {
+            return true;
+        } else {
+            return Math.abs(height(root.left) - height(root.right)) <= 1 && isBalancedbad(root.left) && isBalancedbad(root.right);
+        }
+    }
+
+    public int height(TreeNode root) {
+        if (root == null) {
+            return 0;
+        } else {
+            return Math.max(height(root.left), height(root.right)) + 1;
+        }
+    }
+
+    /**
+     * 输入：root = [3,9,20,null,null,15,7]
+     * 输出：2
+     * 示例 2：
+     * <p>
+     * 输入：root = [2,null,3,null,4,null,5,null,6]
+     * 输出：5
+     *
+     * @param root
+     * @return
+     */
+    public int minDepth(TreeNode root) {
+        if (null == root) {
+            return 0;
+        }
+        int leftd = minDepth(root.left);
+        int rightd = minDepth(root.right);
+        if (leftd <= 0 && rightd <= 0) {
+            return 1;
+        }
+        return Math.min(leftd <= 0 ? Integer.MAX_VALUE : leftd, rightd <= 0 ? Integer.MAX_VALUE : rightd) + 1;
+    }
+
+    public boolean hasPathSum(TreeNode root, int sum) {
+        int curSum = 0;
+
+        boolean find = findSum(root, curSum, sum);
+        return find;
+    }
+
+    private boolean findSum(TreeNode root, int curSum, int sum) {
+        if (null == root) {
+            return false;
+        }
+
+        curSum = curSum + root.val;
+        if (root.left == null && root.right == null) {
+            return curSum == sum;
+        }
+
+        boolean lfind = findSum(root.left, curSum, sum);
+        boolean rfind = findSum(root.right, curSum, sum);
+        return lfind || rfind;
+    }
+
+    /**
+     * yanghui sanjiao
+     *
+     * @param numRows
+     * @return
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> lists = new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            List<Integer> list = new ArrayList<>();
+            for (int l = 0; l <= i; l++) {
+                if (l == 0 || l == i) {
+                    list.add(1);
+                } else {
+                    list.add(lists.get(i - 1).get(l - 1) + lists.get(i - 1).get(l));
+                }
+            }
+            lists.add(list);
+        }
+        return lists;
+    }
+
+    public List<Integer> getRow(int rowIndex) {
+        return generate(rowIndex + 1).get(rowIndex);
+    }
+
+    public List<Integer> getRow2(int N) {
+        List<Integer> res = new ArrayList<>(N + 1);
+        for (int i = 0; i <= N; i++) {
+            res.add(1);
+            for (int j = i - 1; j > 0; j--) {
+                res.set(j, res.get(j) + res.get(j - 1));
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+     * <p>
+     * 设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+     * <p>
+     * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+     * <p>
+     *  
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: [7,1,5,3,6,4]
+     * 输出: 7
+     * 解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     *      随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+     * 示例 2:
+     * <p>
+     * 输入: [1,2,3,4,5]
+     * 输出: 4
+     * 解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     *      注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     *      因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+     * 示例 3:
+     * <p>
+     * 输入: [7,6,4,3,1]
+     * 输出: 0
+     * 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit2(int[] prices) {
+        Integer maxProfit = 0;
+        Integer minindex = null;
+        for (int i = 0; i < prices.length; i++) {
+            if (minindex == null) {
+                if (i + 1 < prices.length && prices[i + 1] < prices[i]) {
+                    continue;
+                }
+
+                if (i - 1 >= 0 && prices[i - 1] < prices[i]) {
+                    continue;
+                }
+
+                minindex = i;
+            } else {
+                if (i + 1 < prices.length && prices[i + 1] > prices[i]) {
+                    continue;
+                }
+
+                if (i - 1 >= 0 && prices[i - 1] > prices[i]) {
+                    continue;
+                }
+
+                maxProfit += (prices[i] - prices[minindex]);
+                minindex = null;
+            }
+
+        }
+        return maxProfit;
+    }
+
+    public int maxProfit2dp2(int[] prices) {
+        int n = prices.length;
+        int dp0 = 0, dp1 = -prices[0];
+        for (int i = 1; i < n; ++i) {
+            int newDp0 = Math.max(dp0, dp1 + prices[i]);
+            int newDp1 = Math.max(dp1, dp0 - prices[i]);
+            dp0 = newDp0;
+            dp1 = newDp1;
+        }
+        return dp0;
+    }
+
+    public int maxProfit2tx(int[] prices) {
+        int ans = 0;
+        int n = prices.length;
+        for (int i = 1; i < n; ++i) {
+            ans += Math.max(0, prices[i] - prices[i - 1]);
+        }
+        return ans;
+    }
+
+    public int maxProfit2dp(int[] prices) {
+        int n = prices.length;
+        int[][] dp = new int[n][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+        for (int i = 1; i < n; ++i) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+        }
+        return dp[n - 1][0];
+    }
+
+    public int maxProfit1Self(int[] prices) {
+        Integer maxProfit = 0;
+        for (int i = 0; i < prices.length - 1; i++) {
+            if (i + 1 < prices.length && prices[i + 1] < prices[i]) {
+                continue;
+            }
+
+            if (i - 1 >= 0 && prices[i - 1] < prices[i]) {
+                continue;
+            }
+
+            for (int j = prices.length - 1; j > i; j--) {
+                maxProfit = Math.max(prices[j] - prices[i], maxProfit);
+            }
+        }
+        return maxProfit;
+    }
+
+    public int maxProfit(int prices[]) {
+        int minprice = Integer.MAX_VALUE;
+        int maxprofit = 0;
+        for (int i = 0; i < prices.length; i++) {
+            if (prices[i] < minprice) {
+                minprice = prices[i];
+            } else if (prices[i] - minprice > maxprofit) {
+                maxprofit = prices[i] - minprice;
+            }
+        }
+        return maxprofit;
+    }
+
+    /**
+     * 给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+     * <p>
+     * 说明：本题中，我们将空字符串定义为有效的回文串。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: "A man, a plan, a canal: Panama"
+     * 输出: true
+     * 示例 2:
+     * <p>
+     * 输入: "race a car"
+     * 输出: false
+     *
+     * @param s
+     * @return
+     */
+    public boolean isPalindrome(String s) {
+        int n = s.length();
+        int left = 0, right = n - 1;
+        while (left < right) {
+            while (left < right && !Character.isLetterOrDigit(s.charAt(left))) {
+                ++left;
+            }
+            while (left < right && !Character.isLetterOrDigit(s.charAt(right))) {
+                --right;
+            }
+            if (left < right) {
+                if (Character.toLowerCase(s.charAt(left)) != Character.toLowerCase(s.charAt(right))) {
+                    return false;
+                }
+                ++left;
+                --right;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * [4,1,8,4,5]
+     * [5,6,1,8,4,5]
+     *
+     * @param headA
+     * @param headB
+     * @return 创建两个指针 pApA 和 pBpB，分别初始化为链表 A 和 B 的头结点。然后让它们向后逐结点遍历。
+     * 当 pApA 到达链表的尾部时，将它重定位到链表 B 的头结点 (你没看错，就是链表 B); 类似的，当 pBpB 到达链表的尾部时，将它重定位到链表 A 的头结点。
+     * 若在某一时刻 pApA 和 pBpB 相遇，则 pApA/pBpB 为相交结点。
+     * 想弄清楚为什么这样可行, 可以考虑以下两个链表: A={1,3,5,7,9,11} 和 B={2,4,9,11}，相交于结点 9。 由于 B.length (=4) < A.length (=6)，pBpB 比 pApA 少经过 2 个结点，会先到达尾部。将 pBpB 重定向到 A 的头结点，pApA 重定向到 B 的头结点后，pBpB 要比 pApA 多走 2 个结点。因此，它们会同时到达交点。
+     * 如果两个链表存在相交，它们末尾的结点必然相同。因此当 pApA/pBpB 到达链表结尾时，记录下链表 A/B 对应的元素。若最后元素不相同，则两个链表不相交。
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+        ListNode curA = headA;
+        ListNode curB = headB;
+        while (curA != curB) {
+            if (curA != null) {
+                curA = curA.next;
+            } else {
+                curA = headB;
+            }
+            if (curB != null) {
+                curB = curB.next;
+            } else {
+                curB = headA;
+            }
+        }
+        return curA;
+    }
+
+    /**
+     * 0
+     * [2,6,4]
+     * [1,5]
+     *
+     * @param headA
+     * @param headB
+     * @return
+     */
+
+    public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+        ListNode pA = headA, pB = headB;
+        while (pA != pB) {
+            pA = pA == null ? headB : pA.next;
+            pB = pB == null ? headA : pB.next;
+        }
+        return pA;
+    }
+
+    public int[] twoSum(int[] numbers, int target) {
+        Integer lowIndex = 0;
+        Integer highIndex = numbers.length - 1;
+        while (lowIndex < highIndex) {
+            if (numbers[lowIndex] + numbers[highIndex] == target) {
+                return new int[]{lowIndex + 1, highIndex + 1};
+            } else if (numbers[lowIndex] + numbers[highIndex] > target) {
+                highIndex--;
+            } else {
+                lowIndex++;
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+    public int[] twoSumEFCZ(int[] numbers, int target) {
+        for (int i = 0; i < numbers.length; ++i) {
+            int low = i + 1, high = numbers.length - 1;
+            while (low <= high) {
+                int mid = (high - low) / 2 + low;
+                if (numbers[mid] == target - numbers[i]) {
+                    return new int[]{i + 1, mid + 1};
+                } else if (numbers[mid] > target - numbers[i]) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+    /**
+     * "abc"
+     * "ahbgdc"
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubsequence(String s, String t) {
+        if (null == s || s.length() == 0) {
+            return true;
+        }
+        char[] chars = s.toCharArray();
+        Integer tstart = 0;
+        one:
+        for (int i = 0; i < s.length(); i++) {
+
+            for (int l = tstart; l < t.length(); l++) {
+                if (tstart >= t.length()) {
+                    return false;
+                }
+                if (t.charAt(l) == chars[i]) {
+                    tstart = l + 1;
+                    continue one;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * "aaaaaa"
+     * "bbaaaa"
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubsequencedoublepoint(String s, String t) {
+        int a = s.length();
+        int b = t.length();
+        int i = 0;
+        int l = 0;
+        while (i < a && l < b) {
+            if (s.charAt(i) == t.charAt(l)) {
+                i++;
+                l++;
+            } else {
+                l++;
+            }
+        }
+        return i == s.length();
+    }
+
+    public boolean isSubsequencedp(String s, String t) {
+        int n = s.length(), m = t.length();
+
+        int[][] f = new int[m + 1][26];
+        for (int i = 0; i < 26; i++) {
+            f[m][i] = m;
+        }
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = 0; j < 26; j++) {
+                if (t.charAt(i) == j + 'a')
+                    f[i][j] = i;
+                else
+                    f[i][j] = f[i + 1][j];
+            }
+        }
+        int add = 0;
+        for (int i = 0; i < n; i++) {
+            if (f[add][s.charAt(i) - 'a'] == m) {
+                return false;
+            }
+            add = f[add][s.charAt(i) - 'a'] + 1;
+        }
+        return true;
+    }
+
+    /**
+     * 假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。
+     * <p>
+     * 对每个孩子 i，都有一个胃口值 g[i]，这是能让孩子们满足胃口的饼干的最小尺寸；并且每块饼干 j，都有一个尺寸 s[j] 。如果 s[j] >= g[i]，
+     * 我们可以将这个饼干 j 分配给孩子 i ，这个孩子会得到满足。你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。
+     * <p>
+     *  
+     * 示例 1:
+     * <p>
+     * 输入: g = [1,2,3], s = [1,1]
+     * 输出: 1
+     * 解释:
+     * 你有三个孩子和两块小饼干，3个孩子的胃口值分别是：1,2,3。
+     * 虽然你有两块小饼干，由于他们的尺寸都是1，你只能让胃口值是1的孩子满足。
+     * 所以你应该输出1。
+     *
+     * @param g
+     * @param s
+     * @return
+     */
+    public int findContentChildren(int[] g, int[] s) {
+
     }
 
     public String longestCommonPrefix(String[] strs) {
