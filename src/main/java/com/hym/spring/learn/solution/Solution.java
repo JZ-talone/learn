@@ -225,7 +225,7 @@ public class Solution {
 
         char first = needle.charAt(0);
         for (int i = 0; i <= haystack.length() - needle.length(); i++) {
-            if (haystack.charAt(i) == first && haystack.substring(i, i + needle.length()).equals(needle)) {
+            if (haystack.charAt(i) == first && haystack.startsWith(needle, i)) {
                 return i;
             }
         }
@@ -912,7 +912,7 @@ public class Solution {
         return maxProfit;
     }
 
-    public int maxProfit(int prices[]) {
+    public int maxProfit(int[] prices) {
         int minprice = Integer.MAX_VALUE;
         int maxprofit = 0;
         for (int i = 0; i < prices.length; i++) {
@@ -1233,8 +1233,6 @@ public class Solution {
      * @return
      */
     public int rob(int[] nums) {
-        // test
-
         return 0;
     }
 
