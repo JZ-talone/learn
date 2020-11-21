@@ -1148,7 +1148,92 @@ public class Solution {
      * @return
      */
     public int findContentChildren(int[] g, int[] s) {
+        if (g.length == 0 || s.length == 0) {
+            return 0;
+        }
+        Integer gindex = 0;
+        Integer sindex = 0;
+        Arrays.sort(g);
+        Arrays.sort(s);
+        while (gindex < g.length && sindex < s.length) {
+            if (g[gindex] <= s[sindex]) {
+                gindex++;
+            }
+            sindex++;
+        }
+        return gindex;
+    }
 
+    /**
+     * 在柠檬水摊上，每一杯柠檬水的售价为 5 美元。
+     * <p>
+     * 顾客排队购买你的产品，（按账单 bills 支付的顺序）一次购买一杯。
+     * <p>
+     * 每位顾客只买一杯柠檬水，然后向你付 5 美元、10 美元或 20 美元。你必须给每个顾客正确找零，也就是说净交易是每位顾客向你支付 5 美元。
+     * <p>
+     * 注意，一开始你手头没有任何零钱。
+     * <p>
+     * 如果你能给每位顾客正确找零，返回 true ，否则返回 false 。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：[5,5,5,10,20]
+     * 输出：true
+     * 解释：
+     * 前 3 位顾客那里，我们按顺序收取 3 张 5 美元的钞票。
+     * 第 4 位顾客那里，我们收取一张 10 美元的钞票，并返还 5 美元。
+     * 第 5 位顾客那里，我们找还一张 10 美元的钞票和一张 5 美元的钞票。
+     * 由于所有客户都得到了正确的找零，所以我们输出 true。
+     *
+     * @param bills
+     * @return
+     */
+    public boolean lemonadeChange(int[] bills) {
+        int five = 0, ten = 0;
+        for (int bill : bills) {
+            if (bill == 5) {
+                five++;
+            } else if (bill == 10) {
+                if (five == 0) {
+                    return false;
+                } else {
+                    five--;
+                    ten++;
+                }
+            } else {
+                if (ten > 0 && five > 0) {
+                    ten--;
+                    five--;
+                } else if (five >= 3) {
+                    five -= 3;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，
+     * 如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+     * <p>
+     * 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：[1,2,3,1]
+     * 输出：4
+     * 解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     *      偷窃到的最高金额 = 1 + 3 = 4 。
+     *
+     * @param nums
+     * @return
+     */
+    public int rob(int[] nums) {
+        return 0;
     }
 
     public String longestCommonPrefix(String[] strs) {
