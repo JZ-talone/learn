@@ -37,16 +37,6 @@ public class Solution {
         }
     }
 
-
-    public static void main(String[] args) {
-        ListNode a = new ListNode(4, null);
-        ListNode b = new ListNode(6, a);
-        ListNode c = new ListNode(2, b);
-        ListNode d = new ListNode(5, null);
-        ListNode e = new ListNode(1, d);
-        System.out.println(new Solution().getIntersectionNode(c, e));
-    }
-
     public int[] twoSum1(int[] nums, int target) {
         int[] answer = new int[2];
         Map<Integer, Integer> map = new HashMap<>();
@@ -1214,26 +1204,133 @@ public class Solution {
         return true;
     }
 
+    int maxD = 0;
+
+    public static void main(String[] args) {
+        int[] nums = new int[]{0, 1, 0, 3, 12};
+        new Solution().moveZeroes(nums);
+    }
+
     /**
-     * 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，
-     * 如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+     * 翻转二叉树
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode tmp = invertTree(root.right);
+        root.right = invertTree(root.left);
+        root.left = tmp;
+        return root;
+    }
+
+    /**
+     * 诺0
+     * 输入: [0,1,0,3,12]
+     * 输出: [1,3,12,0,0]
+     *
+     * @param nums
+     */
+    public void moveZeroes(int[] nums) {
+        Integer indexA = 0;
+        Integer indexB = null;
+        while (indexA < nums.length) {
+            if (nums[indexA] == 0) {
+                if (null == indexB) {
+                    indexB = indexA;
+                }
+
+                indexA++;
+            } else {
+                if (indexB != null) {
+                    Integer tmp = nums[indexA];
+                    nums[indexA] = nums[indexB];
+                    nums[indexB] = tmp;
+
+                    indexB++;
+                    indexA++;
+                } else {
+                    indexA++;
+                }
+            }
+
+        }
+    }
+
+    /**
+     * 消失的数字
+     * 输入:
+     * [4,3,2,7,8,2,3,1]
      * <p>
-     * 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
-     * <p>
-     *  
-     * <p>
-     * 示例 1：
-     * <p>
-     * 输入：[1,2,3,1]
-     * 输出：4
-     * 解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
-     *      偷窃到的最高金额 = 1 + 3 = 4 。
+     * 输出:
+     * [5,6]
      *
      * @param nums
      * @return
      */
-    public int rob(int[] nums) {
-        return 0;
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            int newIndex = Math.abs(nums[i]) - 1;
+            if (nums[newIndex] > 0) {
+                nums[newIndex] *= -1;
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                ans.add(i + 1);
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 二叉树直径
+     *
+     * @param root
+     * @return
+     */
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        deep(root);
+        return maxD;
+    }
+
+    private int deep(TreeNode left) {
+        if (null == left) {
+            return 0;
+        }
+        int ld = deep(left.left);
+        int rd = deep(left.right);
+        maxD = Math.max(ld + rd, maxD);
+        return Math.max(ld, rd) + 1;
+    }
+
+    /**
+     * 合并二叉树
+     *
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if (t1 == null && t2 == null) {
+            return null;
+        }
+        if (t1 == null) {
+            return t2;
+        }
+        if (t2 == null) {
+            return t1;
+        }
+
+        t1.left = mergeTrees(t1.left, t2.left);
+        t1.right = mergeTrees(t1.right, t2.right);
+        t1.val += t2.val;
+        return t1;
     }
 
     public String longestCommonPrefix(String[] strs) {
