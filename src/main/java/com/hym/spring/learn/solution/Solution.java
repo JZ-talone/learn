@@ -10,6 +10,49 @@ import java.util.*;
  */
 public class Solution {
 
+    int maxD = 0;
+    private TreeNode ans = null;
+
+    public static void main(String[] args) {
+        TreeNode treeNode6 = new TreeNode(6);
+        TreeNode treeNode5 = new TreeNode(5, null, treeNode6);
+        TreeNode treeNode4 = new TreeNode(4, null, null);
+        TreeNode treeNode3 = new TreeNode(3, null, null);
+        TreeNode treeNode2 = new TreeNode(2, treeNode3, treeNode4);
+        TreeNode treeNode1 = new TreeNode(1, treeNode2, treeNode5);
+        int[] nums = new int[]{1, 2, 3, 4, 5};
+        Solution solution = new Solution();
+        solution.removeNthFromEnd(solution.gene(nums), 2);
+        System.out.println(solution.numTrees(5));
+        solution.flatten(treeNode1);
+        //new Solution().moveZeroes(nums);
+    }
+
+    /**
+     * 输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+     * 输出: 3
+     * 解释: 节点 5 和节点 1 的最近公共祖先是节点 3。
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        this.dfs(root, p, q);
+        return this.ans;
+    }
+
+    private boolean dfs(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) return false;
+        boolean lson = dfs(root.left, p, q);
+        boolean rson = dfs(root.right, p, q);
+        if ((lson && rson) || ((root.val == p.val || root.val == q.val) && (lson || rson))) {
+            ans = root;
+        }
+        return lson || rson || (root.val == p.val || root.val == q.val);
+    }
+
     /**
      * @param head: n
      * @return: The new head of reversed linked list.
@@ -1204,11 +1247,153 @@ public class Solution {
         return true;
     }
 
-    int maxD = 0;
+    /**
+     * 回文链表
+     *
+     * @param head
+     * @return
+     */
+    public boolean isPalindrome(ListNode head) {
+        if (null == head || head.next == null) {
+            return true;
+        }
 
-    public static void main(String[] args) {
-        int[] nums = new int[]{0, 1, 0, 3, 12};
-        new Solution().moveZeroes(nums);
+        // 找到前半部分链表
+        ListNode halfNode = getHalfNode(head);
+
+        // 翻转后半部分链表
+        ListNode revertListNode = revertNode(halfNode.next);
+
+        // head与revertListNode对比
+        ListNode cur = head;
+        ListNode cur2 = revertListNode;
+        while (cur != null && cur2 != null) {
+            if (cur.val != cur2.val) {
+                return false;
+            }
+            cur = cur.next;
+            cur2 = cur2.next;
+        }
+        revertNode(revertListNode);
+
+        return true;
+    }
+
+    private ListNode revertNode(ListNode next) {
+        ListNode pre = null;
+        ListNode cur = next;
+        while (cur != null) {
+            ListNode curNext = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = curNext;
+        }
+        return pre;
+    }
+
+    /**
+     * 偷窃第 k 间房屋，那么就不能偷窃第 k−1 间房屋，偷窃总金额为前 k−2 间房屋的最高总金额与第 kk 间房屋的金额之和。
+     * 不偷窃第 k 间房屋，偷窃总金额为前 k−1 间房屋的最高总金额。
+     * <p>
+     * 在两个选项中选择偷窃总金额较大的选项，该选项对应的偷窃总金额即为前 k 间房屋能偷窃到的最高总金额。
+     * dp[i]=max(dp[i−2]+nums[i],dp[i−1])
+     */
+
+    private ListNode getHalfNode(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    /**
+     * 小偷问题  2 1 1 2      4
+     *
+     * @param nums
+     * @return
+     */
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        if (nums.length == 2) {
+            return Math.max(nums[0], nums[1]);
+        }
+
+        int dpk2 = nums[0];
+        int dpk1 = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < nums.length; i++) {
+            int dp = Math.max(dpk2 + nums[i], dpk1);
+            dpk2 = dpk1;
+            dpk1 = dp;
+        }
+        return Math.max(dpk2, dpk1);
+    }
+
+    /**
+     * 删除倒数x个节点  [1,2,3,4,5]
+     * 2
+     *
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode rever = revertNode(head);
+        if (n == 1) {
+            rever = rever.next;
+        } else {
+            ListNode pre = null;
+            ListNode cur = rever;
+            Integer i = 1;
+            while (i <= n) {
+                if (i < n) {
+                    pre = cur;
+                    cur = cur.next;
+                } else {
+                    pre.next = cur.next;
+                }
+                i++;
+            }
+        }
+        return revertNode(rever);
+    }
+
+    public ListNode gene(int[] nums) {
+        ListNode head = null;
+        ListNode pre = null;
+        for (int num : nums) {
+            ListNode cur = new ListNode(num, null);
+            if (null != pre) {
+                pre.next = cur;
+            } else {
+                head = cur;
+            }
+            pre = cur;
+        }
+        return head;
+    }
+
+    public ListNode removeNthFromEnd2(ListNode head, int n) {
+        ListNode dummy = new ListNode(0, head);
+        ListNode first = head;
+        ListNode second = dummy;
+        for (int i = 0; i < n; ++i) {
+            first = first.next;
+        }
+        while (first != null) {
+            first = first.next;
+            second = second.next;
+        }
+        second.next = second.next.next;
+        ListNode ans = dummy.next;
+        return ans;
     }
 
     /**
@@ -1364,4 +1549,138 @@ public class Solution {
         }
         return String.valueOf(anschar);
     }
+
+    /**
+     * 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+     * <p>
+     * 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+     * <p>
+     * 说明：不允许修改给定的链表。
+     *
+     * @param head
+     * @return
+     */
+    public ListNode detectCycle(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode cur1 = dummy;
+        ListNode cur2 = dummy;
+        if (null == cur2.next || null == cur2.next || null == cur2.next.next) {
+            return null;
+        }
+        do {
+            cur1 = cur1.next;
+            cur2 = cur2.next.next;
+            if (null == cur2.next || null == cur2.next || null == cur2.next.next) {
+                return null;
+            }
+        } while (cur1 != cur2);
+
+        cur1 = dummy;
+        while (cur1 != cur2) {
+            cur1 = cur1.next;
+            cur2 = cur2.next;
+        }
+
+        return cur1;
+    }
+
+    public int numTrees(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        List<Integer> anss = new ArrayList<>();
+        anss.add(1);
+        anss.add(1);
+        anss.add(2);
+        if (n <= 2) {
+            return anss.get(n);
+        }
+        for (int i = 3; i <= n; i++) {
+            int roundTime = i / 2 + (i % 2 == 0 ? 0 : 1);
+            int ans = 0;
+            for (int x = 0; x < roundTime; x++) {
+                int bs = (i / 2D) - x < 1 ? 1 : 2;
+                int index1 = x - 0;
+                int index2 = i - x - 1;
+                ans += bs * anss.get(index1) * anss.get(index2);
+            }
+            anss.add(ans);
+        }
+        return anss.get(n);
+    }
+
+    /**
+     * 节点的左子树只包含小于当前节点的数。
+     * 节点的右子树只包含大于当前节点的数。
+     * 所有左子树和右子树自身必须也是二叉搜索树。
+     *
+     * @param root
+     * @return
+     */
+    public boolean isValidBST(TreeNode root) {
+        if (null == root) {
+            return true;
+        }
+        return isValidBSTLeft(root.left, Long.parseLong(String.valueOf(root.val)), Long.MIN_VALUE) && isValidBSTRight(root.right, Long.parseLong(String.valueOf(root.val)), Long.MAX_VALUE);
+    }
+
+    private boolean isValidBSTRight(TreeNode root, Long minval, Long maxval) {
+        if (null == root) {
+            return true;
+        }
+
+        if (root.val >= maxval || root.val <= minval) {
+            return false;
+        }
+
+        return isValidBSTLeft(root.left, Long.parseLong(String.valueOf(root.val)), minval) && isValidBSTRight(root.right, Long.parseLong(String.valueOf(root.val)), maxval);
+    }
+
+    private boolean isValidBSTLeft(TreeNode root, Long maxval, Long minval) {
+        if (null == root) {
+            return true;
+        }
+
+        if (root.val >= maxval || root.val <= minval) {
+            return false;
+        }
+
+        return isValidBSTLeft(root.left, Long.parseLong(String.valueOf(root.val)), minval) && isValidBSTRight(root.right, Long.parseLong(String.valueOf(root.val)), maxval);
+
+    }
+
+    /**
+     * 1 2 5 3 4 null 6
+     *
+     * @param root
+     */
+    public void flatten(TreeNode root) {
+        if (null == root) {
+            return;
+        }
+        TreeNode cur = null;
+        Stack<TreeNode> stacks = new Stack<>();
+        stacks.push(root);
+        while (!stacks.isEmpty()) {
+            TreeNode treeNode = stacks.pop();
+            if (null != treeNode.right) {
+                stacks.push(treeNode.right);
+            }
+            if (null != treeNode.left) {
+                stacks.push(treeNode.left);
+            }
+
+            treeNode.left = null;
+            treeNode.right = null;
+            if (cur == null) {
+                cur = treeNode;
+            } else {
+                cur.right = treeNode;
+                cur = treeNode;
+            }
+        }
+
+    }
+
 }
