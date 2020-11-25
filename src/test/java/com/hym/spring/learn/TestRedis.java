@@ -29,12 +29,18 @@ public class TestRedis {
     @Autowired
     private RedisRepo redisRepo;
 
+    /**
+     * template 使用
+     */
     @Test
     public void test() {
         stringRedisTemplate.opsForValue().set("aaa", "111");
         Assert.assertEquals("111", stringRedisTemplate.opsForValue().get("aaa"));
     }
 
+    /**
+     * template 使用
+     */
     @Test
     public void testObj() throws Exception {
         Map map = Maps.newHashMap();
@@ -53,6 +59,9 @@ public class TestRedis {
         Assert.assertEquals("aa", operations.get("com.neox").get("test"));
     }
 
+    /**
+     * 自动生成key 使用
+     */
     @Test
     public void testAuto() {
         System.out.println(JSON.toJSON(redisRepo.getUser("111")));

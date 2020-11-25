@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Component;
 
 /**
  * ${DESCRIPTION}
@@ -13,7 +14,7 @@ import org.springframework.data.mongodb.core.query.Update;
  * @author huangyiming
  * @since 2020/9/13 12:39
  */
-//@Component
+@Component
 public class UserRepositoryImpl {
 
     @Autowired
