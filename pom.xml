@@ -140,6 +140,20 @@
         </dependency>
 
 
+        <!-- Drools规则引擎包 start -->
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-api</artifactId>
+            <version>6.5.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-compiler</artifactId>
+            <version>6.5.0.Final</version>
+        </dependency>
+        <!-- Drools规则引擎包 end -->
+
+
     </dependencies>
 
     <dependencyManagement>
