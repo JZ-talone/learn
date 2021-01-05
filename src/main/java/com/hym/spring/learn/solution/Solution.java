@@ -26,6 +26,117 @@ public class Solution {
         System.out.println(solution.numTrees(5));
         solution.flatten(treeNode1);
         //new Solution().moveZeroes(nums);
+        int[] nums1 = new int[]{-1, 0, 1, 2, -1, -4};
+        solution.threeSum(nums1);
+    }
+
+    /**
+     * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
+     *
+     * 注意：答案中不可以包含重复的三元组。
+     *
+     *  
+     *
+     * 示例：
+     *
+     * 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+     *
+     * 满足要求的三元组集合为：
+     * [
+     *   [-1, 0, 1],
+     *   [-1, -1, 2]
+     * ]
+     *
+     * 解法 排序+双指针 时间复杂度o（n2） 空间复杂度o（n）
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> threeSum(int[] nums) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        // 枚举 a
+        for (int first = 0; first < n; ++first) {
+            // 需要和上一次枚举的数不相同
+            if (first > 0 && nums[first] == nums[first - 1]) {
+                continue;
+            }
+            // c 对应的指针初始指向数组的最右端
+            int third = n - 1;
+            int target = -nums[first];
+            // 枚举 b
+            for (int second = first + 1; second < n; ++second) {
+                // 需要和上一次枚举的数不相同
+                if (second > first + 1 && nums[second] == nums[second - 1]) {
+                    continue;
+                }
+                // 需要保证 b 的指针在 c 的指针的左侧
+                while (second < third && nums[second] + nums[third] > target) {
+                    --third;
+                }
+                // 如果指针重合，随着 b 后续的增加
+                // 就不会有满足 a+b+c=0 并且 b<c 的 c 了，可以退出循环
+                if (second == third) {
+                    break;
+                }
+                if (nums[second] + nums[third] == target) {
+                    List<Integer> list = new ArrayList<Integer>();
+                    list.add(nums[first]);
+                    list.add(nums[second]);
+                    list.add(nums[third]);
+                    ans.add(list);
+                }
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 在一个由小写字母构成的字符串 s 中，包含由一些连续的相同字符所构成的分组。
+     *
+     * 例如，在字符串 s = "abbxxxxzyy" 中，就含有 "a", "bb", "xxxx", "z" 和 "yy" 这样的一些分组。
+     *
+     * 分组可以用区间 [start, end] 表示，其中 start 和 end 分别表示该分组的起始和终止位置的下标。上例中的 "xxxx" 分组用区间表示为 [3,6] 。
+     *
+     * 我们称所有包含大于或等于三个连续字符的分组为 较大分组 。
+     *
+     * 找到每一个 较大分组 的区间，按起始位置下标递增顺序排序后，返回结果。
+     *
+     *  
+     *
+     * 示例 1：
+     *
+     * 输入：s = "abbxxxxzzy"
+     * 输出：[[3,6]]
+     * 解释："xxxx" 是一个起始于 3 且终止于 6 的较大分组。
+     * @param s
+     * @return
+     */
+    public List<List<Integer>> largeGroupPositions(String s) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Integer lowIndex = 0;
+        Integer fastIndex = 0;
+        while(fastIndex<s.length()){
+            if(s.charAt(fastIndex)==s.charAt(lowIndex)){
+                fastIndex++;
+            }else{
+                if(fastIndex-lowIndex>=3){
+                    List<Integer> inner = new ArrayList<>();
+                    inner.add(lowIndex);
+                    inner.add(fastIndex-1);
+                    ans.add(inner);
+                }
+                lowIndex = fastIndex;
+                fastIndex++;
+            }
+        }
+        if(fastIndex-lowIndex>=3){
+            List<Integer> inner = new ArrayList<>();
+            inner.add(lowIndex);
+            inner.add(fastIndex-1);
+            ans.add(inner);
+        }
+        return ans;
     }
 
     /**
