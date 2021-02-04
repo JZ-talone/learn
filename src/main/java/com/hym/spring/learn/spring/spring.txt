@@ -1,0 +1,16 @@
+moduls:
+core
+beans
+context
+expression
+aop aspectj
+jdbc
+tx transaction
+oxm bean-xml
+web sevlet listener filter
+webmvc web-application controller requestmapping
+websocket
+webflux
+message spring4加入
+text
+boot sevlet3+netty+container
