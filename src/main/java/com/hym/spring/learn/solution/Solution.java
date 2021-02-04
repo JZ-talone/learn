@@ -29,26 +29,87 @@ public class Solution {
         int[] nums1 = new int[]{-1, 0, 1, 2, -1, -4};
         solution.threeSum(nums1);
 
-        int[][] xx = new int[][]{new int[]{1,1,0},new int[]{1,1,0},new int[]{0,0,1}};
+        int[][] xx = new int[][]{new int[]{1, 1, 0}, new int[]{1, 1, 0}, new int[]{0, 0, 1}};
         solution.findCircleNum(xx);
     }
 
     /**
+     * 给定 n 个整数，找出平均数最大且长度为 k 的连续子数组，并输出该最大平均数。
+     * <p>
+     * 输入：[1,12,-5,-6,50,3], k = 4
+     * 输出：12.75
+     * 解释：最大平均数 (12-5-6+50)/4 = 51/4 = 12.75
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public double findMaxAverage(int[] nums, int k) {
+        if (nums.length < k) {
+            return 0D;
+        }
+        Double maxAverage = null;
+        Integer currentStartIndex = 0;
+        while (currentStartIndex <= nums.length - k) {
+            if (null == maxAverage) {
+                maxAverage = getAverage(nums, k, currentStartIndex);
+                currentStartIndex++;
+                continue;
+            }
+            if (nums[currentStartIndex + k - 1] <= nums[currentStartIndex - 1]) {
+                currentStartIndex++;
+                continue;
+            } else {
+                Double curAverage = getAverage(nums, k, currentStartIndex);
+                if (curAverage > maxAverage) {
+                    maxAverage = curAverage;
+                }
+                currentStartIndex++;
+                continue;
+            }
+        }
+        return maxAverage;
+    }
+
+    private Double getAverage(int[] nums, int k, Integer currentStartIndex) {
+        Double x = 0D;
+        for (int i = 0; i < k; i++) {
+            x += nums[currentStartIndex + i];
+        }
+        return x / k;
+    }
+
+    public double findMaxAverage2(int[] nums, int k) {
+        int sum = 0;
+        int n = nums.length;
+        for (int i = 0; i < k; i++) {
+            sum += nums[i];
+        }
+        int maxSum = sum;
+        for (int i = k; i < n; i++) {
+            sum = sum - nums[i - k] + nums[i];
+            maxSum = Math.max(maxSum, sum);
+        }
+        return 1.0 * maxSum / k;
+    }
+
+    /**
      * 有 n 个城市，其中一些彼此相连，另一些没有相连。如果城市 a 与城市 b 直接相连，且城市 b 与城市 c 直接相连，那么城市 a 与城市 c 间接相连。
-     *
+     * <p>
      * 省份 是一组直接或间接相连的城市，组内不含其他没有相连的城市。
-     *
+     * <p>
      * 给你一个 n x n 的矩阵 isConnected ，其中 isConnected[i][j] = 1 表示第 i 个城市和第 j 个城市直接相连，而 isConnected[i][j] = 0 表示二者不直接相连。
-     *
+     * <p>
      * 返回矩阵中 省份 的数量
-     *
+     * <p>
      * 输入：isConnected = [[1,1,0],[1,1,0],[0,0,1]]
      * 输出：2
-     *
+     * <p>
      * 输入：isConnected = [[1,0,0],[0,1,0],[0,0,1]]
      * 输出：3
-     *
+     * <p>
      * [[1,0,0,1],[0,1,1,0],[0,1,1,1],[1,0,1,1]]
+     *
      * @param isConnected
      * @return
      */
@@ -57,33 +118,34 @@ public class Solution {
         for (int[] ints : isConnected) {
             Set<Integer> set = new HashSet<>();
             for (int i = 0; i < ints.length; i++) {
-                if(ints[i]==1){
+                if (ints[i] == 1) {
                     set.add(i);
                 }
             }
             list.add(set);
         }
-        return list.size()==0?isConnected.length:list.size();
+        return list.size() == 0 ? isConnected.length : list.size();
     }
 
     /**
      * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
-     *
+     * <p>
      * 注意：答案中不可以包含重复的三元组。
-     *
+     * <p>
      *  
-     *
+     * <p>
      * 示例：
-     *
+     * <p>
      * 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
-     *
+     * <p>
      * 满足要求的三元组集合为：
      * [
-     *   [-1, 0, 1],
-     *   [-1, -1, 2]
+     * [-1, 0, 1],
+     * [-1, -1, 2]
      * ]
-     *
+     * <p>
      * 解法 排序+双指针 时间复杂度o（n2） 空间复杂度o（n）
+     *
      * @param nums
      * @return
      */
@@ -129,22 +191,23 @@ public class Solution {
 
     /**
      * 在一个由小写字母构成的字符串 s 中，包含由一些连续的相同字符所构成的分组。
-     *
+     * <p>
      * 例如，在字符串 s = "abbxxxxzyy" 中，就含有 "a", "bb", "xxxx", "z" 和 "yy" 这样的一些分组。
-     *
+     * <p>
      * 分组可以用区间 [start, end] 表示，其中 start 和 end 分别表示该分组的起始和终止位置的下标。上例中的 "xxxx" 分组用区间表示为 [3,6] 。
-     *
+     * <p>
      * 我们称所有包含大于或等于三个连续字符的分组为 较大分组 。
-     *
+     * <p>
      * 找到每一个 较大分组 的区间，按起始位置下标递增顺序排序后，返回结果。
-     *
+     * <p>
      *  
-     *
+     * <p>
      * 示例 1：
-     *
+     * <p>
      * 输入：s = "abbxxxxzzy"
      * 输出：[[3,6]]
      * 解释："xxxx" 是一个起始于 3 且终止于 6 的较大分组。
+     *
      * @param s
      * @return
      */
@@ -152,24 +215,24 @@ public class Solution {
         List<List<Integer>> ans = new ArrayList<>();
         Integer lowIndex = 0;
         Integer fastIndex = 0;
-        while(fastIndex<s.length()){
-            if(s.charAt(fastIndex)==s.charAt(lowIndex)){
+        while (fastIndex < s.length()) {
+            if (s.charAt(fastIndex) == s.charAt(lowIndex)) {
                 fastIndex++;
-            }else{
-                if(fastIndex-lowIndex>=3){
+            } else {
+                if (fastIndex - lowIndex >= 3) {
                     List<Integer> inner = new ArrayList<>();
                     inner.add(lowIndex);
-                    inner.add(fastIndex-1);
+                    inner.add(fastIndex - 1);
                     ans.add(inner);
                 }
                 lowIndex = fastIndex;
                 fastIndex++;
             }
         }
-        if(fastIndex-lowIndex>=3){
+        if (fastIndex - lowIndex >= 3) {
             List<Integer> inner = new ArrayList<>();
             inner.add(lowIndex);
-            inner.add(fastIndex-1);
+            inner.add(fastIndex - 1);
             ans.add(inner);
         }
         return ans;
