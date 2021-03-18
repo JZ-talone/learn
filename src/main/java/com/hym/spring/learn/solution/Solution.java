@@ -13,26 +13,6 @@ public class Solution {
     int maxD = 0;
     private TreeNode ans = null;
 
-    public static void main(String[] args) {
-        TreeNode treeNode6 = new TreeNode(6);
-        TreeNode treeNode5 = new TreeNode(5, null, treeNode6);
-        TreeNode treeNode4 = new TreeNode(4, null, null);
-        TreeNode treeNode3 = new TreeNode(3, null, null);
-        TreeNode treeNode2 = new TreeNode(2, treeNode3, treeNode4);
-        TreeNode treeNode1 = new TreeNode(1, treeNode2, treeNode5);
-        int[] nums = new int[]{1, 2, 3, 4, 5};
-        Solution solution = new Solution();
-        solution.removeNthFromEnd(solution.gene(nums), 2);
-        System.out.println(solution.numTrees(5));
-        solution.flatten(treeNode1);
-        //new Solution().moveZeroes(nums);
-        int[] nums1 = new int[]{-1, 0, 1, 2, -1, -4};
-        solution.threeSum(nums1);
-
-        int[][] xx = new int[][]{new int[]{1, 1, 0}, new int[]{1, 1, 0}, new int[]{0, 0, 1}};
-        solution.findCircleNum(xx);
-    }
-
     /**
      * 给定 n 个整数，找出平均数最大且长度为 k 的连续子数组，并输出该最大平均数。
      * <p>
@@ -1893,4 +1873,200 @@ public class Solution {
 
     }
 
+    /**
+     * 给定一个字符串 s 和一个字符串 t ，计算在 s 的子序列中 t 出现的个数。
+     *
+     * 字符串的一个 子序列 是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。（例如，"ACE"是"ABCDE"的一个子序列，而"AEC"不是）
+     *
+     * 题目数据保证答案符合 32 位带符号整数范围。
+     *
+     *
+     * s = "babgbag", t = "bag"
+     * @param s
+     * @param t
+     * @return
+     */
+    public int numDistinct(String s, String t) {
+        if(t.length()>s.length()){
+            return 0;
+        }
+        return findCount(s,t,0);
+    }
+
+    /**
+     * s = "babgbag", t = "bag"
+     * @param s
+     * @param t
+     * @param tindex
+     * @return
+     */
+    private int findCount(String s, String t, int tindex) {
+        Integer totalCount = 0;
+        Integer fromIndex = null;
+        while(fromIndex==null||fromIndex>=0){
+            if(fromIndex==null){
+                fromIndex = s.indexOf(t.charAt(tindex));
+            }else{
+                fromIndex = s.indexOf(t.charAt(tindex),fromIndex+1);
+            }
+
+            if(fromIndex>=0){
+                if(tindex==t.length()-1){
+                    totalCount+=1;
+                }else if(fromIndex+1<s.length()){
+                    totalCount+=findCount(s.substring(fromIndex+1),t,tindex+1);
+                }
+            }
+
+        }
+        return totalCount;
+    }
+
+    public int numDistinct2(String s, String t) {
+        int m = s.length(), n = t.length();
+        if (m < n) {
+            return 0;
+        }
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) {
+            dp[i][n] = 1;
+        }
+        for (int i = m - 1; i >= 0; i--) {
+            char sChar = s.charAt(i);
+            for (int j = n - 1; j >= 0; j--) {
+                char tChar = t.charAt(j);
+                if (sChar == tChar) {
+                    dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j];
+                } else {
+                    dp[i][j] = dp[i + 1][j];
+                }
+            }
+        }
+        return dp[0][0];
+    }
+
+    public int numDistinct3(String s, String t) {
+        int sl = s.length();
+        int tl = t.length();
+        int[][] dp = new int[sl+1][tl+1];
+        for(int i=0;i<sl+1;i++){
+            dp[i][0] = 1;
+        }
+        for(int i=1;i<tl+1;i++){
+            dp[0][i] = 0;
+        }
+        for(int i=1;i<sl+1;i++){
+            for(int l=1;l<tl+1;l++){
+                if(s.charAt(i-1)==t.charAt(l-1)){
+                    dp[i][l] = dp[i-1][l-1]+dp[i-1][l];
+                }else{
+                    dp[i][l] = dp[i-1][l];
+                }
+            }
+        }
+        return dp[sl][tl];
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+//        TreeNode treeNode6 = new TreeNode(6);
+//        TreeNode treeNode5 = new TreeNode(5, null, treeNode6);
+//        TreeNode treeNode4 = new TreeNode(4, null, null);
+//        TreeNode treeNode3 = new TreeNode(3, null, null);
+//        TreeNode treeNode2 = new TreeNode(2, treeNode3, treeNode4);
+//        TreeNode treeNode1 = new TreeNode(1, treeNode2, treeNode5);
+//        int[] nums = new int[]{1, 2, 3, 4, 5};
+//        solution.removeNthFromEnd(solution.gene(nums), 2);
+//        System.out.println(solution.numTrees(5));
+//        solution.flatten(treeNode1);
+//        //new Solution().moveZeroes(nums);
+//        int[] nums1 = new int[]{-1, 0, 1, 2, -1, -4};
+//        solution.threeSum(nums1);
+//
+//        int[][] xx = new int[][]{new int[]{1, 1, 0}, new int[]{1, 1, 0}, new int[]{0, 0, 1}};
+//        solution.findCircleNum(xx);
+//        System.out.println(solution.numDistinct("adbdadeecadeadeccaeaabdabdbcdabddddabcaaadbabaaedeeddeaeebcdeabcaaaeeaeeabcddcebddebeebedaecccbdcbcedbdaeaedcdebeecdaaedaacadbdccabddaddacdddc"
+//                ,"bcddceeeebecbc"));
+        System.out.println(solution.massage(new int[]{0,0,0,1}));
+    }
+
+    /**
+     * 输入： [2,1,4,5,3,1,1,3]
+     * 输出： 12
+     * 非相邻最大和
+     * @param nums
+     * @return
+     */
+    public int massage(int[] nums) {
+        int[][] dp = new int[nums.length+2][2];
+        for(int i=0;i<nums.length+2;i++){
+            for(int l=0;l<2;l++){
+                if(i==0||i==1){
+                    dp[i][l] = 0;
+                }else{
+                    if(l==0){
+                        dp[i][l] = nums[i-2]+dp[i-1][l+1];
+                    }else{
+                        dp[i][l] = Math.max(dp[i-1][l],dp[i-1][l-1]);
+                    }
+                }
+            }
+        }
+        return Math.max(dp[nums.length+1][0],dp[nums.length+1][1]);
+    }
+
+    public boolean divisorGame(int N) {
+        boolean[] dp = new boolean[N];
+        dp[0] = false;
+        one:for(int i=1;i<N;i++){
+            int real = i+1;
+            for(int l=1;l<real;l++){
+                if(real%l==0){
+                    if(!dp[real-l-1]){
+                        dp[i] = true;
+                        continue one;
+                    }
+                }
+            }
+            dp[i] = false;
+        }
+        return dp[N-1];
+    }
+
+    /**
+     * 示例 1：
+     *
+     * 输入：cost = [10, 15, 20]
+     * 输出：15
+     * 解释：最低花费是从 cost[1] 开始，然后走两步即可到阶梯顶，一共花费 15 。
+     *  示例 2：
+     *
+     * 输入：cost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
+     * 输出：6
+     * 解释：最低花费方式是从 cost[0] 开始，逐个经过那些 1 ，跳过 cost[3] ，一共花费 6 。
+     * @param cost
+     * @return
+     */
+    public int minCostClimbingStairs(int[] cost) {
+        int[][] dp = new int[cost.length][2];
+        for(int i=0;i<cost.length;i++){
+            for(int l=0;l<2;l++){
+                if(l==0){
+                    if(i>1){
+                        dp[i][l] = cost[i] + Math.min(dp[i-1][0],dp[i-2][0]);
+                    }else{
+                        dp[i][l] = cost[i];
+                    }
+                }
+                if(l==1){
+                    if(i>0){
+                        dp[i][l] = dp[i-1][0];
+                    }else{
+                        dp[i][l] = 0;
+                    }
+                }
+            }
+        }
+        return Math.min(dp[cost.length-1][0],dp[cost.length-1][1]);
+    }
 }
