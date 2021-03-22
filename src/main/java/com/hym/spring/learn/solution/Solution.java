@@ -1875,26 +1875,28 @@ public class Solution {
 
     /**
      * 给定一个字符串 s 和一个字符串 t ，计算在 s 的子序列中 t 出现的个数。
-     *
+     * <p>
      * 字符串的一个 子序列 是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。（例如，"ACE"是"ABCDE"的一个子序列，而"AEC"不是）
-     *
+     * <p>
      * 题目数据保证答案符合 32 位带符号整数范围。
-     *
-     *
+     * <p>
+     * <p>
      * s = "babgbag", t = "bag"
+     *
      * @param s
      * @param t
      * @return
      */
     public int numDistinct(String s, String t) {
-        if(t.length()>s.length()){
+        if (t.length() > s.length()) {
             return 0;
         }
-        return findCount(s,t,0);
+        return findCount(s, t, 0);
     }
 
     /**
      * s = "babgbag", t = "bag"
+     *
      * @param s
      * @param t
      * @param tindex
@@ -1903,18 +1905,18 @@ public class Solution {
     private int findCount(String s, String t, int tindex) {
         Integer totalCount = 0;
         Integer fromIndex = null;
-        while(fromIndex==null||fromIndex>=0){
-            if(fromIndex==null){
+        while (fromIndex == null || fromIndex >= 0) {
+            if (fromIndex == null) {
                 fromIndex = s.indexOf(t.charAt(tindex));
-            }else{
-                fromIndex = s.indexOf(t.charAt(tindex),fromIndex+1);
+            } else {
+                fromIndex = s.indexOf(t.charAt(tindex), fromIndex + 1);
             }
 
-            if(fromIndex>=0){
-                if(tindex==t.length()-1){
-                    totalCount+=1;
-                }else if(fromIndex+1<s.length()){
-                    totalCount+=findCount(s.substring(fromIndex+1),t,tindex+1);
+            if (fromIndex >= 0) {
+                if (tindex == t.length() - 1) {
+                    totalCount += 1;
+                } else if (fromIndex + 1 < s.length()) {
+                    totalCount += findCount(s.substring(fromIndex + 1), t, tindex + 1);
                 }
             }
 
@@ -1948,23 +1950,214 @@ public class Solution {
     public int numDistinct3(String s, String t) {
         int sl = s.length();
         int tl = t.length();
-        int[][] dp = new int[sl+1][tl+1];
-        for(int i=0;i<sl+1;i++){
+        int[][] dp = new int[sl + 1][tl + 1];
+        for (int i = 0; i < sl + 1; i++) {
             dp[i][0] = 1;
         }
-        for(int i=1;i<tl+1;i++){
+        for (int i = 1; i < tl + 1; i++) {
             dp[0][i] = 0;
         }
-        for(int i=1;i<sl+1;i++){
-            for(int l=1;l<tl+1;l++){
-                if(s.charAt(i-1)==t.charAt(l-1)){
-                    dp[i][l] = dp[i-1][l-1]+dp[i-1][l];
-                }else{
-                    dp[i][l] = dp[i-1][l];
+        for (int i = 1; i < sl + 1; i++) {
+            for (int l = 1; l < tl + 1; l++) {
+                if (s.charAt(i - 1) == t.charAt(l - 1)) {
+                    dp[i][l] = dp[i - 1][l - 1] + dp[i - 1][l];
+                } else {
+                    dp[i][l] = dp[i - 1][l];
                 }
             }
         }
         return dp[sl][tl];
+    }
+
+    /**
+     * 输入：height = [65,70,56,75,60,68] weight = [100,150,90,190,95,110]
+     * 输出：6
+     * 解释：从上往下数，叠罗汉最多能叠 6 层：(56,90), (60,95), (65,100), (68,110), (70,150), (75,190)
+     *
+     * @param height
+     * @param weight
+     * @return
+     */
+    public int bestSeqAtIndex(int[] height, int[] weight) {
+        return 0;
+    }
+
+    public int waysToStep(int n) {
+        int[][] dp = new int[n >= 3 ? n : 4][3];
+        dp[0][0] = 1;
+        dp[0][1] = 0;
+        dp[0][2] = 0;
+        dp[1][0] = 1;
+        dp[1][1] = 1;
+        dp[1][2] = 0;
+        dp[2][0] = 2;
+        dp[2][1] = 1;
+        dp[2][2] = 1;
+        for (int i = 3; i < n; i++) {
+            for (int l = 0; l < 3; l++) {
+                dp[i][l] = (dp[i - l - 1][0] + (dp[i - l - 1][2] + dp[i - l - 1][1]) % 1000000007) % 1000000007;
+            }
+        }
+        return (dp[n - 1][0] + (dp[n - 1][2] + dp[n - 1][1]) % 1000000007) % 1000000007;
+    }
+
+    /**
+     * 输入： [2,1,4,5,3,1,1,3]
+     * 输出： 12
+     * 非相邻最大和
+     *
+     * @param nums
+     * @return
+     */
+    public int massage(int[] nums) {
+        int[][] dp = new int[nums.length + 2][2];
+        for (int i = 0; i < nums.length + 2; i++) {
+            for (int l = 0; l < 2; l++) {
+                if (i == 0 || i == 1) {
+                    dp[i][l] = 0;
+                } else {
+                    if (l == 0) {
+                        dp[i][l] = nums[i - 2] + dp[i - 1][l + 1];
+                    } else {
+                        dp[i][l] = Math.max(dp[i - 1][l], dp[i - 1][l - 1]);
+                    }
+                }
+            }
+        }
+        return Math.max(dp[nums.length + 1][0], dp[nums.length + 1][1]);
+    }
+
+    public boolean divisorGame(int N) {
+        boolean[] dp = new boolean[N];
+        dp[0] = false;
+        one:
+        for (int i = 1; i < N; i++) {
+            int real = i + 1;
+            for (int l = 1; l < real; l++) {
+                if (real % l == 0) {
+                    if (!dp[real - l - 1]) {
+                        dp[i] = true;
+                        continue one;
+                    }
+                }
+            }
+            dp[i] = false;
+        }
+        return dp[N - 1];
+    }
+
+    /**
+     * 示例 1：
+     * <p>
+     * 输入：cost = [10, 15, 20]
+     * 输出：15
+     * 解释：最低花费是从 cost[1] 开始，然后走两步即可到阶梯顶，一共花费 15 。
+     *  示例 2：
+     * <p>
+     * 输入：cost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
+     * 输出：6
+     * 解释：最低花费方式是从 cost[0] 开始，逐个经过那些 1 ，跳过 cost[3] ，一共花费 6 。
+     *
+     * @param cost
+     * @return
+     */
+    public int minCostClimbingStairs(int[] cost) {
+        int[][] dp = new int[cost.length][2];
+        for (int i = 0; i < cost.length; i++) {
+            for (int l = 0; l < 2; l++) {
+                if (l == 0) {
+                    if (i > 1) {
+                        dp[i][l] = cost[i] + Math.min(dp[i - 1][0], dp[i - 2][0]);
+                    } else {
+                        dp[i][l] = cost[i];
+                    }
+                }
+                if (l == 1) {
+                    if (i > 0) {
+                        dp[i][l] = dp[i - 1][0];
+                    } else {
+                        dp[i][l] = 0;
+                    }
+                }
+            }
+        }
+        return Math.min(dp[cost.length - 1][0], dp[cost.length - 1][1]);
+    }
+
+    /**
+     * 输入: nums = [-2,1,-3,4,-1,2,1,-5,4]
+     * 输出: 6
+     * 解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+     *
+     * @param nums
+     * @return
+     */
+    public int maxSubArray2(int[] nums) {
+        int curstart = 0;
+        int curend = 0;
+        int curmax = nums[0];
+        int cursum = 0;
+        int befsum = nums[0];
+        boolean go = true;
+        while (curstart < nums.length - 1) {
+            if (curstart == curend) {
+                go = true;
+            }
+            if (curend >= nums.length - 1) {
+                go = false;
+            }
+            if (go) {
+                curend++;
+                cursum = befsum + nums[curend];
+                curmax = Math.max(cursum, curmax);
+                if (cursum > befsum) {
+                    go = true;
+                } else if (cursum < befsum) {
+                    go = false;
+                } else {
+                    if (curend + 1 <= nums.length && nums[curend + 1] >= 0) {
+                        go = true;
+                    } else {
+                        go = false;
+                    }
+                }
+                befsum = cursum;
+            } else {
+                cursum = befsum - nums[curstart];
+                curstart++;
+                curmax = Math.max(cursum, curmax);
+                if (cursum > befsum) {
+                    go = true;
+                } else if (cursum < befsum) {
+                    go = false;
+                } else {
+                    if (curend + 1 <= nums.length && nums[curend + 1] >= 0) {
+                        go = true;
+                    } else {
+                        go = false;
+                    }
+                }
+                befsum = cursum;
+            }
+        }
+
+        return curmax;
+    }
+
+    public int maxSubArray(int[] nums) {
+        int curMax = nums[0];
+        int[][] dp = new int[nums.length][nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            dp[i][i] = nums[i];
+            curMax = Math.max(nums[i], curMax);
+        }
+        for (int i = 0; i < nums.length - 1; i++) {
+            for (int l = i + 1; l < nums.length; l++) {
+                dp[i][l] = dp[i][l - 1] + nums[l];
+                curMax = Math.max(dp[i][l], curMax);
+            }
+        }
+        return curMax;
     }
 
     public static void main(String[] args) {
@@ -1987,86 +2180,9 @@ public class Solution {
 //        solution.findCircleNum(xx);
 //        System.out.println(solution.numDistinct("adbdadeecadeadeccaeaabdabdbcdabddddabcaaadbabaaedeeddeaeebcdeabcaaaeeaeeabcddcebddebeebedaecccbdcbcedbdaeaedcdebeecdaaedaacadbdccabddaddacdddc"
 //                ,"bcddceeeebecbc"));
-        System.out.println(solution.massage(new int[]{0,0,0,1}));
+//        System.out.println(solution.massage(new int[]{0,0,0,1}));
+//        System.out.println(solution.maxSubArray2(new int[]{8,-19,5,-4,20}));
+        System.out.println(solution.waysToStep(61));
     }
 
-    /**
-     * 输入： [2,1,4,5,3,1,1,3]
-     * 输出： 12
-     * 非相邻最大和
-     * @param nums
-     * @return
-     */
-    public int massage(int[] nums) {
-        int[][] dp = new int[nums.length+2][2];
-        for(int i=0;i<nums.length+2;i++){
-            for(int l=0;l<2;l++){
-                if(i==0||i==1){
-                    dp[i][l] = 0;
-                }else{
-                    if(l==0){
-                        dp[i][l] = nums[i-2]+dp[i-1][l+1];
-                    }else{
-                        dp[i][l] = Math.max(dp[i-1][l],dp[i-1][l-1]);
-                    }
-                }
-            }
-        }
-        return Math.max(dp[nums.length+1][0],dp[nums.length+1][1]);
-    }
-
-    public boolean divisorGame(int N) {
-        boolean[] dp = new boolean[N];
-        dp[0] = false;
-        one:for(int i=1;i<N;i++){
-            int real = i+1;
-            for(int l=1;l<real;l++){
-                if(real%l==0){
-                    if(!dp[real-l-1]){
-                        dp[i] = true;
-                        continue one;
-                    }
-                }
-            }
-            dp[i] = false;
-        }
-        return dp[N-1];
-    }
-
-    /**
-     * 示例 1：
-     *
-     * 输入：cost = [10, 15, 20]
-     * 输出：15
-     * 解释：最低花费是从 cost[1] 开始，然后走两步即可到阶梯顶，一共花费 15 。
-     *  示例 2：
-     *
-     * 输入：cost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
-     * 输出：6
-     * 解释：最低花费方式是从 cost[0] 开始，逐个经过那些 1 ，跳过 cost[3] ，一共花费 6 。
-     * @param cost
-     * @return
-     */
-    public int minCostClimbingStairs(int[] cost) {
-        int[][] dp = new int[cost.length][2];
-        for(int i=0;i<cost.length;i++){
-            for(int l=0;l<2;l++){
-                if(l==0){
-                    if(i>1){
-                        dp[i][l] = cost[i] + Math.min(dp[i-1][0],dp[i-2][0]);
-                    }else{
-                        dp[i][l] = cost[i];
-                    }
-                }
-                if(l==1){
-                    if(i>0){
-                        dp[i][l] = dp[i-1][0];
-                    }else{
-                        dp[i][l] = 0;
-                    }
-                }
-            }
-        }
-        return Math.min(dp[cost.length-1][0],dp[cost.length-1][1]);
-    }
 }
